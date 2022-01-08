@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+
+  web-server:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    restart: always
+    volumes:
+      - "./lamp/html/:/var/www/html/"
+    ports:
+      - "8888:80"
+    env_file:
+      - ./.env
+
+  mysql-server:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.0.1
+    restart: always
+    environment:
+      PMA_HOST: mysql-server
+      PMA_USER: root
+      PMA_PASSWORD: secret
+    ports:
+      - "5555:80"
+volumes:
+  mysql-data:
