@@ -8,7 +8,7 @@ pipeline {
     environment {
         registry = "dimenssion/build"
         registryCredential = 'ci-docker'
-        dockerTag = 'lts'
+        dockerTag = ':lts'
     }
 
     triggers { pollSCM('* * * * *') }
@@ -34,7 +34,7 @@ pipeline {
         stage('Building image') {
             steps{
                 script {
-                    docker.image(registry + 'lts').pull()
+                    docker.image(registry + dockerTag).pull()
                     /* docker.build registry + ":$BUILD_NUMBER" */
                 }
             }
