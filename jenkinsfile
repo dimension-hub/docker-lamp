@@ -34,7 +34,7 @@ pipeline {
         stage('Building image') {
             steps{
                 script {
-                    docker.image(registry + dockerTag).pull()
+                    docker.image(registry + 'lts').pull()
                     /* docker.build registry + ":$BUILD_NUMBER" */
                 }
             }
