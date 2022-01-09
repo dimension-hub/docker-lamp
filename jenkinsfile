@@ -1,0 +1,56 @@
+#!groovy
+properties([disableConcurrentBuilds(), pipelineTriggers([githubPush()])])
+
+pipeline {
+
+    agent any
+
+    environment {
+        registry = "dimenssion/build"
+        registryCredential = 'ci-docker'
+        dockerTag = 'lts'
+    }
+
+    triggers { pollSCM('* * * * *') }
+        options {
+            buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+            timestamps()
+        }
+
+    stages {
+        /* checkout repo */
+        stage('Checkout SCM') {
+            steps {
+                checkout([
+                 $class: 'GitSCM',
+                 branches: [[name: 'master']],
+                 userRemoteConfigs: [[
+                    url: 'git@github.com:dimension-hub/docker-lamp.git',
+                    credentialsId: 'ci-jenkins',
+                 ]]
+                ])
+            }
+        }
+        stage('Building image') {
+            steps{
+                script {
+                    docker.image(registry + dockerTag).pull()
+                    docker.build registry + ":$BUILD_NUMBER"
+                }
+            }
+        }
+        stage('Remove Unused docker image') {
+            steps{
+                sh "docker rmi $registry:$BUILD_NUMBER"
+                sh "docker system prune -af"
+      }
+    }
+    }
+    /* Cleanup workspace */
+    post {
+        always {
+            deleteDir()
+            }
+    }
+
+}
