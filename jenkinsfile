@@ -1,18 +1,17 @@
-/* groovylint-disable-next-line CompileStatic */
 properties([disableConcurrentBuilds(), pipelineTriggers([githubPush()])])
 
 pipeline {
+
     agent any
 
     environment {
-        registry = 'dimenssion/build'
+        registry = "dimenssion/build"
         registryCredential = 'ci-docker'
         dockerTag = ':lts'
     }
 
     triggers { pollSCM('* * * * *') }
         options {
-            /* groovylint-disable-next-line DuplicateStringLiteral */
             buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
             timestamps()
         }
@@ -41,8 +40,7 @@ pipeline {
         }
         stage('Connection') {
             steps {
-                /* groovylint-disable-next-line DuplicateStringLiteral, SpaceAfterMethodCallName */
-                sshagent (credentials: ['ci-jenkins']) {
+                sshagent(credentials: ['ci-jenkins']) {
                     sh 'ssh -T ubuntu@ec2 df -h / | tee >(cat /etc/os-release) >(free -h) | cowsay -f duck | lolcat'
                 }
             }
@@ -51,13 +49,14 @@ pipeline {
             steps {
                 /* sh "docker rmi $registry:$BUILD_NUMBER" */
                 sh 'docker system prune -af'
-            }
-        }
+      }
+    }
     }
     /* Cleanup workspace */
     post {
         always {
                 deleteDir()
-        }
+            }
     }
+
 }
