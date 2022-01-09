@@ -8,7 +8,7 @@ pipeline {
         registry = 'dimenssion/build'
         registryCredential = 'ci-docker'
         dockerTag = ':lts'
-        credentialsId 'ci-jenkins'
+        credentialsId = 'ci-jenkins'
     }
 
     triggers { pollSCM('* * * * *') }
