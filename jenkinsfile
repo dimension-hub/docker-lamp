@@ -5,9 +5,10 @@ pipeline {
     agent any
 
     environment {
-        registry = "dimenssion/build"
+        registry = 'dimenssion/build'
         registryCredential = 'ci-docker'
         dockerTag = ':lts'
+        credentialsId 'ci-jenkins'
     }
 
     triggers { pollSCM('* * * * *') }
@@ -25,7 +26,7 @@ pipeline {
                  branches: [[name: 'master']],
                  userRemoteConfigs: [[
                     url: 'git@github.com:dimension-hub/docker-lamp.git',
-                    credentialsId: 'ci-jenkins',
+                    credentialsId: credentialsId,
                  ]]
                 ])
             }
@@ -40,8 +41,8 @@ pipeline {
         }
         stage('Connection') {
             steps {
-                sshagent(credentials: ['ci-jenkins']) {
-                    sh 'ssh -T ubuntu@ec2 df -h / | tee >(cat /etc/os-release) >(free -h) | cowsay -f duck | lolcat'
+                sshagent(credentials: [credentialsId]) {
+                    sh 'ssh -T ubuntu@ec2 hostname'
                 }
             }
         }
