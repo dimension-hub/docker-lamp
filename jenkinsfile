@@ -41,14 +41,6 @@ pipeline {
                 ])
             }
         }
-        stage('Building image') {
-            steps{
-                script {
-                    docker.image(registry + dockerTag).pull()
-                    /* docker.build registry + ":$BUILD_NUMBER" */
-                }
-            }
-        }
         stage('Connection') {
             steps {
                 sshagent(credentials: [credentialsId]) {
