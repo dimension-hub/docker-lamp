@@ -7,6 +7,11 @@ def dockerImage() {
     }
 }
 
+def dockerRm() {
+    /* sh "docker rmi $registry:$BUILD_NUMBER" */
+    sh 'docker system prune -af'
+}
+
 
 properties([disableConcurrentBuilds(), pipelineTriggers([githubPush()])])
 
@@ -41,17 +46,12 @@ pipeline {
                 ])
             }
         }
-        stage('Remove Unused docker image') {
-            steps {
-                /* sh "docker rmi $registry:$BUILD_NUMBER" */
-                sh 'docker system prune -af'
-      }
-    }
     }
     /* Cleanup workspace */
     post {
         always {
                 dockerImage()
+                dockerRm()
             }
     }
 
