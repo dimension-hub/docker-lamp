@@ -16,7 +16,7 @@ pipeline {
 
     environment {
         registry = 'dimenssion/build'
-        registryCredential = 'ci-docker'
+        registryCredential = 'build-lamp-ssh'
         dockerTag = ':lts'
         credentialsId = 'build-lamp-ssh'
     }
