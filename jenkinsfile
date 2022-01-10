@@ -3,7 +3,7 @@ def dockerImage() {
     withCredentials([usernamePassword(credentialsId: 'ci-docker', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
         sh 'docker build -t dimenssion/build:smile .'
         sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-        sh 'docker pull dimenssion/build:smile'
+        sh 'docker push dimenssion/build:smile'
     }
 }
 
