@@ -1,9 +1,9 @@
 def dockerImage() {
     echo(message: 'building the docker image...')
     withCredentials([usernamePassword(credentialsId: 'ci-docker', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-        sh 'docker build -t dimenssion/build:smile .'
+        /* sh 'docker build -t dimenssion/build:smile .' */
         sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-        sh 'docker push dimenssion/build:smile'
+        sh 'docker pull dimenssion/build:latest'
     }
 }
 
