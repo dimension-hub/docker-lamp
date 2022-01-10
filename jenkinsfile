@@ -41,13 +41,6 @@ pipeline {
                 ])
             }
         }
-        stage('Connection') {
-            steps {
-                sshagent(credentials: [credentialsId]) {
-                    sh 'ssh -T ubuntu@ec2 hostname'
-                }
-            }
-        }
         stage('Remove Unused docker image') {
             steps {
                 /* sh "docker rmi $registry:$BUILD_NUMBER" */
