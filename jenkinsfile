@@ -39,9 +39,9 @@ pipeline {
         stage('build and push image') {
             steps {
                 script {
-                    buildImage 'dimenssion/build:test'
+                    buildImage "dimenssion/build:$BUILD_NUMBER"
                     dockerLogin()
-                    dockerPush 'dimenssion/build:test'
+                    dockerPush "dimenssion/build:$BUILD_NUMBER"
                 }
             }
         }
