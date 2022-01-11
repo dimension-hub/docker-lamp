@@ -1,7 +1,7 @@
 library identifier: 'jenkins-shared-library@main', retriever: modernSCM(
         [$class: 'GitSCMSource',
          remote: 'git@gitlab.com:devops-dimension/jenkins-sared-library.git',
-         credentialsId: 'ci-jenkins'
+         credentialsId: 'aws-jenkins'
         ]
 )
 
@@ -24,7 +24,7 @@ pipeline {
                  branches: [[name: 'master']],
                  userRemoteConfigs: [[
                     url: 'git@github.com:dimension-hub/docker-lamp.git',
-                    credentialsId: 'gitlab-ssh',
+                    credentialsId: 'aws-jenkins',
                  ]]
                 ])
             }
