@@ -45,5 +45,12 @@ pipeline {
                 }
             }
         }
+        stage('clean docker images') {
+            steps {
+                script {
+                    dockerCleanImage()
+                }
+            }
+        }
     }
 }

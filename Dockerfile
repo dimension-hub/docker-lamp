@@ -5,13 +5,13 @@ FROM ubuntu:20.04
 # ARG uid
 
 # Install system dependencies
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -y && apt-get install -y \
-    software-properties-common \
-    wget curl \
-    git vim \
-    zip unzip \
-    cowsay lolcat
+# ENV DEBIAN_FRONTEND=noninteractive
+# RUN apt-get update -y && apt-get install -y \
+#     software-properties-common \
+#     wget curl \
+#     git vim \
+#     zip unzip \
+#     cowsay lolcat
 
 # # Install PHP and SMILE extensions
 # RUN wget http://smilebuntu.vitry.intranet/smile-depot.gpg -O /tmp/smile-depot.gpg && \
@@ -33,7 +33,7 @@ RUN apt-get update -y && apt-get install -y \
 #     php7.4-mbstring
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Get latest Composer
 # COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
