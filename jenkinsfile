@@ -1,37 +1,20 @@
-def dockerImage() {
-    echo(message: 'building the docker image...')
-    withCredentials([usernamePassword(credentialsId: 'ci-docker', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-        sh 'docker build -t dimenssion/build:smile .'
-        sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-        sh 'docker push dimenssion/build:smile'
-    }
-}
-
-def dockerRm() {
-    /* sh "docker rmi $registry:$BUILD_NUMBER" */
-    sh 'docker system prune -af'
-}
-
+library identifier: 'jenkins-shared-library@main', retriever: modernSCM(
+        [$class: 'GitSCMSource',
+         remote: 'git@gitlab.com:devops-dimension/jenkins-sared-library.git',
+         credentialsId: 'ci-jenkins'
+        ]
+)
 
 properties([disableConcurrentBuilds(), pipelineTriggers([githubPush()])])
 
 pipeline {
-
     agent any
-
-    environment {
-        registry = 'dimenssion/build'
-        registryCredential = 'build-lamp-ssh'
-        dockerTag = ':lts'
-        credentialsId = 'build-lamp-ssh'
-    }
 
     triggers { pollSCM('* * * * *') }
         options {
             buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
             timestamps()
         }
-
     stages {
         /* checkout repo */
         stage('Checkout SCM') {
@@ -41,18 +24,26 @@ pipeline {
                  branches: [[name: 'master']],
                  userRemoteConfigs: [[
                     url: 'git@github.com:dimension-hub/docker-lamp.git',
-                    credentialsId: credentialsId,
+                    credentialsId: 'gitlab-ssh',
                  ]]
                 ])
             }
         }
-    }
-    /* Cleanup workspace */
-    post {
-        always {
-                dockerImage()
-                dockerRm()
+        stage('build app') {
+            steps {
+                script {
+                    buildapp()
+                }
             }
+        }
+        stage('build and push image') {
+            steps {
+                script {
+                    buildImage 'dimenssion/build:test'
+                    dockerLogin()
+                    dockerPush 'dimenssion/build:test'
+                }
+            }
+        }
     }
-
 }

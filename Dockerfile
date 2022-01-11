@@ -13,24 +13,24 @@ RUN apt-get update -y && apt-get install -y \
     zip unzip \
     cowsay lolcat
 
-# Install PHP and SMILE extensions
-RUN wget http://smilebuntu.vitry.intranet/smile-depot.gpg -O /tmp/smile-depot.gpg && \
-    apt-key add /tmp/smile-depot.gpg
-RUN echo "deb http://smilebuntu.vitry.intranet/depot smilebuntu main" > /etc/apt/sources.list.d/smile.list
-RUN apt-get update -y && apt-get install -y \
-    php7.4 \
-    php7.4-dev \
-    php7.4-cli \
-    php7.4-zip \
-    php7.4-mysql \
-    php7.4-gd \
-    libapache2-mod-php \
-    php7.4-curl \
-    php7.4-xml \
-    php7.4-bcmath \
-    php7.4-json \
-    php7.4-common \
-    php7.4-mbstring
+# # Install PHP and SMILE extensions
+# RUN wget http://smilebuntu.vitry.intranet/smile-depot.gpg -O /tmp/smile-depot.gpg && \
+#     apt-key add /tmp/smile-depot.gpg
+# RUN echo "deb http://smilebuntu.vitry.intranet/depot smilebuntu main" > /etc/apt/sources.list.d/smile.list
+# RUN apt-get update -y && apt-get install -y \
+#     php7.4 \
+#     php7.4-dev \
+#     php7.4-cli \
+#     php7.4-zip \
+#     php7.4-mysql \
+#     php7.4-gd \
+#     libapache2-mod-php \
+#     php7.4-curl \
+#     php7.4-xml \
+#     php7.4-bcmath \
+#     php7.4-json \
+#     php7.4-common \
+#     php7.4-mbstring
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
